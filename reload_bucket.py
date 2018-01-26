@@ -1,4 +1,4 @@
-#/bin/env python
+# /bin/env python
 """
 A tool to upload contents to s3 buckets
 """
@@ -35,7 +35,7 @@ def main():
         """
         A function to upload an entire directory
         """
-        objects = client.list_objects(Bucket=bucket_name,Delimiter="/")
+        objects = client.list_objects(Bucket=bucket_name, Delimiter="/")
         if 'CommonPrefixes' in objects:
             prefixes = objects['CommonPrefixes']
             log.info("Directories in {0}: {1}".format(bucket_name, [str(prefix['Prefix']) for prefix in prefixes]))
@@ -51,13 +51,10 @@ def main():
             for file in files:
                 filepath = os.path.join(root, file)
                 remote_file_path = os.path.join(remote_path_root, new_root, file)
-                log.info("Uploading " + filepath  + " to " + remote_file_path)
                 content_type = mimetypes.guess_type(filepath)[0]
-                client.upload_file(filepath,
-                                           bucket_name,
-                                           remote_file_path,
-                                           ExtraArgs={'ACL': 'public-read',
-                                                      'ContentType': content_type})
+                log.info("Uploading {0} to {1} ({2})".format(filepath, remote_file_path, content_type))
+                client.upload_file(filepath, bucket_name, remote_file_path, ExtraArgs={'ACL': 'public-read',
+                                                                                       'ContentType': content_type})
 
     client = boto3.client('s3')
     s3 = boto3.resource('s3')
@@ -67,6 +64,7 @@ def main():
                                                        os.path.join(endpoint, bucket_name, remote_path_root)))
     for directory in directories:
         upload_directory(directory)
+
 
 if __name__ == "__main__":
     main()
