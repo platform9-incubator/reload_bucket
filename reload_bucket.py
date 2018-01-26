@@ -9,6 +9,7 @@ import logging
 import sys
 import os
 import mimetypes
+import magic
 
 logging.basicConfig(stream=sys.stdout,
                     level=logging.INFO,
@@ -28,6 +29,7 @@ def main():
     # CentOS 7 is not aware of the .json extension unless we install mailcap
     # https://stackoverflow.com/questions/33354969/why-is-mimetypes-guess-typea-json-not-working-in-centos-7#33356241
     mimetypes.add_type('application/json', '.json')
+    mime = magic.Magic(mime=True)
 
     bucket_name = config['bucket']
     endpoint = config['endpoint']
@@ -53,6 +55,8 @@ def main():
                 filepath = os.path.join(root, file)
                 remote_file_path = os.path.join(remote_path_root, new_root, file)
                 content_type = mimetypes.guess_type(filepath)[0]
+                if content_type is None:
+                    content_type = mime.from_file(filepath)
                 log.info("Uploading {0} to {1} ({2})".format(filepath, remote_file_path, content_type))
                 client.upload_file(filepath, bucket_name, remote_file_path, ExtraArgs={'ACL': 'public-read',
                                                                                        'ContentType': content_type})
