@@ -36,14 +36,15 @@ def main():
         A function to upload an entire directory
         """
         objects = client.list_objects(Bucket=bucket_name,Delimiter="/")
-        prefixes = objects['CommonPrefixes']
-        log.info("Directories in {0}: {1}".format(bucket_name, [str(prefix['Prefix']) for prefix in prefixes]))
-        for prefix in prefixes:
-            if prefix['Prefix'].split("/")[0] == remote_path_root:
-                log.info("Found an existing directory: {0}...deleting".format(remote_path_root))
-                for key in bucket.objects.filter(Prefix=remote_path_root):
-                    log.info("Deleting {0}".format(key))
-                    key.delete()
+        if 'CommonPrefixes' in objects:
+            prefixes = objects['CommonPrefixes']
+            log.info("Directories in {0}: {1}".format(bucket_name, [str(prefix['Prefix']) for prefix in prefixes]))
+            for prefix in prefixes:
+                if prefix['Prefix'].split("/")[0] == remote_path_root:
+                    log.info("Found an existing directory: {0}...deleting".format(remote_path_root))
+                    for key in bucket.objects.filter(Prefix=remote_path_root):
+                        log.info("Deleting {0}".format(key))
+                        key.delete()
 
         for root, dirs, files in os.walk(path):
             new_root = '/'.join(root.split(os.path.sep)[1:])
