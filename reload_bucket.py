@@ -26,6 +26,8 @@ def main():
     version = config['version']
     remote_path_root = os.path.join(base_path, version) if version else user
     mimetypes.add_type('.css', 'text/css')
+    mimetypes.add_type('.json', 'application/json')
+
     bucket_name = config['bucket']
     endpoint = config['endpoint']
 
