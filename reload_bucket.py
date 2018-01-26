@@ -25,8 +25,9 @@ def main():
     base_path = config['base_path']
     version = config['version']
     remote_path_root = os.path.join(base_path, version) if version else user
-    mimetypes.add_type('.css', 'text/css')
-    mimetypes.add_type('.json', 'application/json')
+    # CentOS 7 is not aware of the .json extension unless we install mailcap
+    # https://stackoverflow.com/questions/33354969/why-is-mimetypes-guess-typea-json-not-working-in-centos-7#33356241
+    mimetypes.add_type('application/json', '.json')
 
     bucket_name = config['bucket']
     endpoint = config['endpoint']
