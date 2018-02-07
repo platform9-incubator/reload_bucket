@@ -2,9 +2,18 @@
 bucket: "vann.platform9.com"
 endpoint: "s3-us-west-1.amazonaws.com"
 region: "us-west-1"
-base_path: "clarity"
+base_path: "clarity/releases"
 version: null
 directories:
   - build
 
-
+redirect_rules:
+  - name: "atherton"
+    prefix: "clarity/latest"
+    replace_with: "clarity/releases/atherton"
+  - name: "platform9-v3.1"
+    prefix: "clarity/platform9-v3.1"
+    replace_with: "clarity/releases/platform9-v3.1/f4b2b7dd/"
+  - name: "platform9-v3.2"
+    prefix: "clarity/platform9-v3.2"
+    replace_with: "clarity/releases/platform9-v3.2/3f41f7fb/"

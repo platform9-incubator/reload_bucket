@@ -1,4 +1,4 @@
-# /bin/env python
+#! /bin/env python
 """
 A tool to upload contents to s3 buckets
 """
@@ -24,7 +24,11 @@ def main():
         config = yaml.load(manifest)
     user = os.getenv('USER', 'nobody')
     base_path = config['base_path']
+
+    # first get version from the manifest file
     version = config['version']
+    # if the env variable VERSION exists, override version above
+    version = os.getenv('VERSION', version)
     remote_path_root = os.path.join(base_path, version) if version else user
     # CentOS 7 is not aware of the .json extension unless we install mailcap
     # https://stackoverflow.com/questions/33354969/why-is-mimetypes-guess-typea-json-not-working-in-centos-7#33356241
