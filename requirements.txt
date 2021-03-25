@@ -6,6 +6,6 @@ jmespath==0.9.3
 lxml==4.1.1
 python-dateutil==2.6.1
 python-magic==0.4.15
-PyYAML==5.1
+PyYAML==5.4
 s3transfer==0.1.12
 six==1.11.0
